@@ -3,6 +3,13 @@ export class InputHandler{
         this.x = 0;
         this.y = 0;
 
+        this.shakeThreshold = 15;
+        this.lastX = 0;
+        this.lastY = 0;
+        this.lastZ = 0;
+        this.lastTime = 0;
+        this.shakeCount = 0;
+
         // desktop WSAD
         this.keys = [];
         window.addEventListener('keydown', e => {
@@ -10,6 +17,11 @@ export class InputHandler{
             if ((e.key === 'ArrowDown' || e.key === 's') && this.keys.indexOf('down') === -1) this.keys.push('down');
             if ((e.key === 'ArrowLeft' || e.key === 'a') && this.keys.indexOf('left') === -1) this.keys.push('left');
             if ((e.key === 'ArrowRight' || e.key === 'd') && this.keys.indexOf('right') === -1) this.keys.push('right');
+
+            if (e.code === 'Space') {
+                this.shakeCount++;
+                console.log("Shake simulated Count: " + this.shakeCount);
+            }
         });
 
         window.addEventListener('keyup', e => {
@@ -58,7 +70,32 @@ export class InputHandler{
             this.x = 0;
             this.y = 0;
         });
+
+        if (window.DeviceMotionEvent) {
+            window.addEventListener('devicemotion', e => {
+                const acc = e.accelerationIncludingGravity;
+                if (!acc) return;
+
+                const currentTime = Date.now();
+                if ((currentTime-this.lastTime) > 100) {
+                    const diffTime = currentTime - this.lastTime;
+                    this.lastTime = currentTime;
+
+                    const speed = Math.abs(acc.x + acc.y + acc.z - this.lastX - this.lastY - this.lastZ) / diffTime * 10000;
+
+                    if (speed > this.shakeThreshold * 100) {
+                        this.shakeCount++;
+                        console.log("Device Shake detected! Count: " + this.shakeCount);
+                    }
+                    this.lastX = acc.x;
+                    this.lastY = acc.y;
+                    this.lastZ = acc.z;
+                }
+            });
+        }
     }
+
+
 
     // method for desktop keyboard WSAD
     update() {

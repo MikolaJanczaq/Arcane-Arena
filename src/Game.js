@@ -76,6 +76,10 @@ export class Game {
             const distance = Math.hypot(dx, dy);
 
             if (distance < nearbyEnemie.radius + this.player.radius) {
+                if (Math.random() < 0.1) {
+                    this.player.applyFreeze();
+                }
+
                 this.player.takeDamage(nearbyEnemie.damage);
             }
         })
