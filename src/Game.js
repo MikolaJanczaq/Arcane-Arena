@@ -1,6 +1,7 @@
 import {InputHandler} from "./InputHandler.js";
 import {Player} from "./Player.js";
 import {Background} from "./Background.js";
+import {Enemy} from "./Enemy.js";
 
 export class Game {
     constructor(width, height) {
@@ -13,12 +14,29 @@ export class Game {
         this.player = new Player(this);
         this.background = new Background(this);
 
+        this.enemies = [];
+        this.enemyTimer = 0;
+        this.enemyInterval = 1000; // ms
+
         console.log("Game initiated: " + this.width + "x" + this.height + "");
     }
 
     update(deltaTime) {
         this.input.update();
         this.player.update(this.input);
+
+        if (this.enemyTimer > this.enemyInterval) {
+            this.enemies.push(new Enemy(this));
+            this.enemyTimer = 0;
+        } else {
+            this.enemyTimer += deltaTime;
+        }
+
+        this.enemies.forEach(enemy => {
+            enemy.update();
+        })
+
+        this.enemies = this.enemies.filter(enemy => !enemy.markedForDeletion);
     }
 
     draw(context) {
@@ -26,6 +44,10 @@ export class Game {
         context.fillRect(0, 0, this.width, this.height);
 
         this.background.draw(context);
+
+        this.enemies.forEach(enemy => {
+            enemy.draw(context);
+        });
 
         this.player.draw(context);
 

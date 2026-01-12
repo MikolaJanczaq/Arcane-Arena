@@ -5,7 +5,7 @@ export class Player {
         this.worldY = 0;
         this.speed = 3;
         this.radius = 20;
-        this.color = 'red'
+        this.color = 'gold'
     }
 
     update(input) {
