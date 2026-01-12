@@ -8,7 +8,7 @@ export class Enemy {
         this.worldX = this.game.player.worldX + Math.cos(spawnAngle) * spawnRadius;
         this.worldY = this.game.player.worldY + Math.sin(spawnAngle) * spawnRadius;
 
-        this.speed = 2;
+        this.speed = 0.5;
         this.radius = 15;
         this.color = 'red'
 

@@ -15,6 +15,11 @@ export class Game {
         this.isPaused = false;
         this.gameOver = false;
 
+        this.playerImage = new Image();
+        this.playerImage.src = "assets/player/Swordsman_lvl1_Walk.png";
+
+        this.playerAttackImage = new Image();
+        this.playerAttackImage.src = "assets/player/Swordsman_lvl1_Walk_Attack.png";
 
         this.input = new InputHandler();
         this.player = new Player(this);
