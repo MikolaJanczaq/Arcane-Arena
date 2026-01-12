@@ -30,7 +30,8 @@ export class Weapon {
         let nearestEnemy = null;
         let minDistance = Infinity;
 
-        this.game.enemies.forEach(enemy => {
+        const potentialTargets = this.game.grid.getNearby(this.game.player.worldX, this.game.player.worldY);
+        potentialTargets.forEach(enemy => {
             const dx = enemy.worldX - this.game.player.worldX;
             const dy = enemy.worldY - this.game.player.worldY;
             const distance = Math.hypot(dx, dy);

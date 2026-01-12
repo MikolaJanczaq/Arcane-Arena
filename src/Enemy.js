@@ -15,6 +15,8 @@ export class Enemy {
         this.maxHp = 30;
         this.hp = this.maxHp;
 
+        this.damage = 10;
+
         this.markedForDeletion = false;
     }
 
