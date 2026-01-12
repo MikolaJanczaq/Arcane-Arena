@@ -1,5 +1,6 @@
 import {InputHandler} from "./InputHandler.js";
 import {Player} from "./Player.js";
+import {Background} from "./Background.js";
 
 export class Game {
     constructor(width, height) {
@@ -7,8 +8,10 @@ export class Game {
         this.height = height;
         this.lastTime = 0;
         this.isPaused = false;
+
         this.input = new InputHandler();
         this.player = new Player(this);
+        this.background = new Background(this);
 
         console.log("Game initiated: " + this.width + "x" + this.height + "");
     }
@@ -19,10 +22,14 @@ export class Game {
     }
 
     draw(context) {
-        context.fillStyle = "#1a1a1a";
+        context.fillStyle = "#228B22";
         context.fillRect(0, 0, this.width, this.height);
 
+        this.background.draw(context);
+
         this.player.draw(context);
+
+        // joystick
         if(this.input.touchActive) {
             // joystick base
             context.beginPath()
