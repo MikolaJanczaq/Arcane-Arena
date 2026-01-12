@@ -3,10 +3,13 @@ import {Weapon} from "./Weapon.js";
 export class Sword extends Weapon {
     constructor(game) {
         super(game);
+        this.name = "Sword";
+        this.level = 1;
 
-        this.damage = 25;
-        this.range = 60;
+        this.damage = 10;
+        this.range = 70;
         this.cooldown = 1000;
+        this.timer = 0;
 
         this.isAttacking = false;
         this.attactDuration = 200;
@@ -41,6 +44,21 @@ export class Sword extends Weapon {
                 enemy.takeDamage(this.damage);
             }
         });
+    }
+
+    upgrade() {
+        this.level++;
+        if (this.level === 2) {
+            this.damage = 20;
+            this.range = 140;
+            this.cooldown = 900;
+            console.log("Sword upgraded to Level 2!");
+        } else if (this.level === 3) {
+            this.damage = 35;
+            this.range = 180;
+            this.cooldown = 700;
+            console.log("Sword upgraded to MAX Level!");
+        }
     }
 
     draw(context) {

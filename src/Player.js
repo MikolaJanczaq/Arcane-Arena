@@ -6,7 +6,7 @@ export class Player {
         this.worldX = 0;
         this.worldY = 0;
 
-        this.speed = 3;
+        this.speed = 1 ;
         this.radius = 20;
 
         this.experience = 0;
@@ -111,6 +111,7 @@ export class Player {
         this.experienceToNextLevel = Math.floor(this.experienceToNextLevel * 1.2);
         this.hp = this.maxHp;
         console.log("Level Up! Level: " + this.level);
+        this.game.triggerLevelUp();
     }
 
     takeDamage(amount) {

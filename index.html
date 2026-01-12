@@ -7,7 +7,17 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<canvas id="gameCanvas"></canvas>
+
+<div id="game-container">
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="levelup-screen" class="hidden">
+        <h2 style="color: gold; margin-top: 0;">LEVEL UP!</h2>
+        <p>Choose upgrade:</p>
+        <div id="options-container">
+        </div>
+    </div>
+</div>
 
 <script type="module" src="src/main.js"></script>
 </body>
