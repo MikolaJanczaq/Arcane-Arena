@@ -1,31 +1,29 @@
 export class Player {
     constructor(game) {
         this.game = game;
-        this.x = game.width * 0.5;
-        this.y = game.height * 0.5;
-        this.radius = 20;
+        this.worldX = 0;
+        this.worldY = 0;
         this.speed = 3;
-        this.color = 'gold'
+        this.radius = 20;
+        this.color = 'red'
     }
 
     update(input) {
-        this.x += input.x * this.speed;
-        this.y += input.y * this.speed;
-
-        // temporary boundaries
-        if (this.x < this.radius) this.x = this.radius;
-        if (this.x > this.game.width - this.radius) this.x = this.game.width - this.radius;
-        if (this.y < this.radius) this.y = this.radius;
-        if (this.y > this.game.height - this.radius) this.y = this.game.height - this.radius;
+        this.worldX += input.x * this.speed;
+        this.worldY += input.y * this.speed;
     }
 
     draw(context) {
+        const screenX = this.game.width /2;
+        const screenY = this.game.height / 2;
+
         context.save();
         context.beginPath();
-        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        context.arc(screenX, screenY, this.radius, 0, Math.PI * 2);
         context.fillStyle = this.color;
         context.fill();
         context.strokeStyle = 'black';
+        context.lineWidth = 2;
         context.stroke();
         context.restore();
     }
