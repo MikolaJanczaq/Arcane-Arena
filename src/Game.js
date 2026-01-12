@@ -2,6 +2,7 @@ import {InputHandler} from "./InputHandler.js";
 import {Player} from "./Player.js";
 import {Background} from "./Background.js";
 import {Enemy} from "./Enemy.js";
+import {Sword} from "./Sword.js";
 
 export class Game {
     constructor(width, height) {
@@ -17,6 +18,9 @@ export class Game {
         this.enemies = [];
         this.enemyTimer = 0;
         this.enemyInterval = 1000; // ms
+
+        this.weapons = []
+        this.weapons.push(new Sword(this));
 
         console.log("Game initiated: " + this.width + "x" + this.height + "");
     }
@@ -35,8 +39,11 @@ export class Game {
         this.enemies.forEach(enemy => {
             enemy.update();
         })
-
         this.enemies = this.enemies.filter(enemy => !enemy.markedForDeletion);
+
+        this.weapons.forEach(weapons => {
+            weapons.update(deltaTime);
+        })
     }
 
     draw(context) {
@@ -50,6 +57,10 @@ export class Game {
         });
 
         this.player.draw(context);
+
+        this.weapons.forEach(weapon => {
+            weapon.draw(context);
+        })
 
         // joystick
         if(this.input.touchActive) {
