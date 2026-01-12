@@ -26,6 +26,7 @@ export class Sword extends Weapon {
     }
 
     attack(target) {
+        if (this.game.player.isFrozen) return;
         this.isAttacking = true;
         this.attackTimer = 0;
 

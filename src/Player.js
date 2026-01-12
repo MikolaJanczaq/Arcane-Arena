@@ -21,6 +21,10 @@ export class Player {
         this.invulnerableTimer = 0;
         this.invulnerableInterval = 500;
 
+        this.isFrozen = false;
+        this.shakesNeeded = 5;
+        this.currentShakes = 0;
+
         const frameSize = 64;
 
         this.spriteWalk = new Sprite(this.game, this.game.playerImage, frameSize, frameSize);
@@ -31,6 +35,17 @@ export class Player {
     }
 
     update(input, deltatime) {
+        if (this.isFrozen) {
+            const shakesDone = input.shakeCount - this.startShakeCount;
+            if (shakesDone >= this.shakesNeeded) {
+                this.unfreeze();
+            }
+
+            this.spriteWalk.frameX = 0;
+            this.spriteAttack.frameX = 0;
+            return;
+        }
+
         if (input.x !== 0 || input.y !== 0) {
             this.worldX += input.x * this.speed;
             this.worldY += input.y * this.speed;
@@ -72,9 +87,22 @@ export class Player {
             if (this.invulnerableTimer > this.invulnerableInterval) {
                 this.invulnerable = false;
                 this.invulnerableTimer = 0;
-                this.color = 'gold';
             }
         }
+    }
+
+    applyFreeze() {
+        if (this.isFrozen || this.invulnerable) return;
+        this.isFrozen = true;
+        console.log("Player frozen Shake device or press space")
+        this.startShakeCount = this.game.input.shakeCount;
+    }
+
+    unfreeze() {
+        this.isFrozen = false;
+        console.log("Player unfrozen")
+        this.invulnerable = true;
+        this.invulnerableTimer = 0;
     }
 
     levelUp() {
@@ -98,16 +126,43 @@ export class Player {
     draw(context) {
         const screenX = this.game.width / 2;
         const screenY = this.game.height / 2;
+
+        if (this.isFrozen) {
+            context.save();
+            context.beginPath();
+            context.arc(screenX, screenY, 30, 0, Math.PI*2);
+            context.fillStyle = 'rgba(0, 100, 255, 0.5)';
+            context.fill();
+            context.restore();
+        }
+
         if (this.invulnerable) context.globalAlpha = 0.5;
 
         const isAttacking = this.game.weapons[0] && this.game.weapons[0].isAttacking;
 
-        if (isAttacking) {
+        if (isAttacking && !this.isFrozen) {
             this.spriteAttack.draw(context, screenX, screenY, 100, 100);
         } else {
             this.spriteWalk.draw(context, screenX, screenY, 100, 100);
         }
 
         context.globalAlpha = 1;
+
+        if (this.isFrozen) {
+            context.save();
+            context.fillStyle = 'white';
+            context.font = '20px Arial';
+            context.textAlign = 'center';
+            context.fillText("SHAKE!", screenX, screenY - 50);
+
+            const shakes = this.game.input.shakeCount - this.startShakeCount;
+            const percent = Math.min(shakes / this.shakesNeeded, 1);
+
+            context.fillStyle = 'black';
+            context.fillRect(screenX - 20, screenY - 45, 40, 5);
+            context.fillStyle = '#00FFFF';
+            context.fillRect(screenX - 20, screenY - 45, 40 * percent, 5);
+            context.restore();
+        }
     }
 }
