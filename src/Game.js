@@ -16,10 +16,15 @@ export class Game {
         this.gameOver = false;
 
         this.playerImage = new Image();
-        this.playerImage.src = "assets/player/Swordsman_lvl1_Walk.png";
-
+        this.playerImage.src = "assets/player/Swordsman_Walk.png";
         this.playerAttackImage = new Image();
-        this.playerAttackImage.src = "assets/player/Swordsman_lvl1_Walk_Attack.png";
+        this.playerAttackImage.src = "assets/player/Swordsman_Walk_Attack.png";
+
+        this.enemyFoxImage = new Image();
+        this.enemyFoxImage.src = "assets/enemies/Fox/Fox_Run.png"
+
+        this.enemyBirdImage = new Image();
+        this.enemyBirdImage.src = "assets/enemies/Bird/Bird_Flight.png"
 
         this.input = new InputHandler();
         this.player = new Player(this);
@@ -47,7 +52,9 @@ export class Game {
         this.player.update(this.input, deltaTime);
 
         if (this.enemyTimer > this.enemyInterval) {
-            this.enemies.push(new Enemy(this));
+            const isFox = Math.random() < 0.5;
+            const enemyImage = isFox ? this.enemyFoxImage : this.enemyBirdImage;
+            this.enemies.push(new Enemy(this, enemyImage));
             this.enemyTimer = 0;
         } else {
             this.enemyTimer += deltaTime;
@@ -56,7 +63,7 @@ export class Game {
         this.grid.clear();
 
         this.enemies.forEach(enemy => {
-            enemy.update();
+            enemy.update(deltaTime);
             this.grid.add(enemy);
         })
         this.enemies = this.enemies.filter(enemy => !enemy.markedForDeletion);
