@@ -12,6 +12,9 @@ export class Enemy {
         this.radius = 15;
         this.color = 'red'
 
+        this.maxHp = 30;
+        this.hp = this.maxHp;
+
         this.markedForDeletion = false;
     }
 
@@ -39,6 +42,22 @@ export class Enemy {
         context.fill();
         context.strokeStyle = 'black';
         context.stroke();
+
+        if (this.hp < this.maxHp) {
+            context.fillStyle = 'red';
+            context.fillRect(screenX - 10, screenY - 25, 20,4);
+            context.fillStyle = '#00ff00';
+            context.fillRect(screenX - 10, screenY - 25, 20 * (this.hp / this.maxHp), 4);
+        }
+
         context.restore();
+    }
+
+    takeDamage(amount) {
+        this.hp -= amount;
+        if (this.hp <= 0) {
+            this.markedForDeletion = true;
+            this.game.spawnDrop(this.worldX, this.worldY);
+        }
     }
 }

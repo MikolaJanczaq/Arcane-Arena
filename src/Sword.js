@@ -35,7 +35,7 @@ export class Sword extends Weapon {
 
         this.game.enemies.forEach(enemy => {
             if (this.checkHit(enemy)) {
-                enemy.markedForDeletion = true;
+                enemy.takeDamage(this.damage);
             }
         });
     }
