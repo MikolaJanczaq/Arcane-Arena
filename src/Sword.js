@@ -33,7 +33,9 @@ export class Sword extends Weapon {
         const dy = target.worldY - this.game.player.worldY;
         this.attackAngle = Math.atan2(dy, dx);
 
-        this.game.enemies.forEach(enemy => {
+        const potentialTargets = this.game.grid.getNearby(this.game.player.worldX, this.game.player.worldY);
+
+        potentialTargets.forEach(enemy => {
             if (this.checkHit(enemy)) {
                 enemy.takeDamage(this.damage);
             }

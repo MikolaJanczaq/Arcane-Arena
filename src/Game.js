@@ -4,6 +4,8 @@ import {Background} from "./Background.js";
 import {Enemy} from "./Enemy.js";
 import {Sword} from "./Sword.js";
 import {Drop} from "./Drop.js";
+import {UI} from "./UI.js";
+import {SpatialGrid} from "./SpatialGrid.js";
 
 export class Game {
     constructor(width, height) {
@@ -11,10 +13,15 @@ export class Game {
         this.height = height;
         this.lastTime = 0;
         this.isPaused = false;
+        this.gameOver = false;
+
 
         this.input = new InputHandler();
         this.player = new Player(this);
         this.background = new Background(this);
+        this.ui = new UI(this);
+
+        this.grid = new SpatialGrid(300);
 
         this.enemies = [];
         this.enemyTimer = 0;
@@ -29,8 +36,10 @@ export class Game {
     }
 
     update(deltaTime) {
+        if (this.gameOver) return;
+
         this.input.update();
-        this.player.update(this.input);
+        this.player.update(this.input, deltaTime);
 
         if (this.enemyTimer > this.enemyInterval) {
             this.enemies.push(new Enemy(this));
@@ -39,10 +48,25 @@ export class Game {
             this.enemyTimer += deltaTime;
         }
 
+        this.grid.clear();
+
         this.enemies.forEach(enemy => {
             enemy.update();
+            this.grid.add(enemy);
         })
         this.enemies = this.enemies.filter(enemy => !enemy.markedForDeletion);
+
+        const nearbyEnemies = this.grid.getNearby(this.player.worldX, this.player.worldY);
+
+        nearbyEnemies.forEach(nearbyEnemie => {
+            const dx = nearbyEnemie.worldX - this.player.worldX;
+            const dy = nearbyEnemie.worldY - this.player.worldY;
+            const distance = Math.hypot(dx, dy);
+
+            if (distance < nearbyEnemie.radius + this.player.radius) {
+                this.player.takeDamage(nearbyEnemie.damage);
+            }
+        })
 
         this.weapons.forEach(weapons => {
             weapons.update(deltaTime);
@@ -72,7 +96,7 @@ export class Game {
         this.drops.forEach(drop => drop.draw(context));
 
         // joystick
-        if(this.input.touchActive) {
+        if(this.input.touchActive && !this.gameOver) {
             // joystick base
             context.beginPath()
             context.strokeStyle = 'rgba(255, 255, 255, 0.5)';
@@ -86,6 +110,8 @@ export class Game {
             context.arc(this.input.touchStartX + (this.input.x * 50), this.input.touchStartY + (this.input.y * 50), 20, 0, Math.PI * 2);
             context.fill();
         }
+
+        this.ui.draw(context);
     }
     spawnDrop(x, y) {
         const chance = Math.random();
