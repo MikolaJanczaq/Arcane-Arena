@@ -6,6 +6,9 @@ export class Player {
         this.speed = 3;
         this.radius = 20;
         this.color = 'gold'
+
+        this.experience = 0;
+        this.gold = 0;
     }
 
     update(input) {

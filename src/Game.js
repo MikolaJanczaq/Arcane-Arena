@@ -3,6 +3,7 @@ import {Player} from "./Player.js";
 import {Background} from "./Background.js";
 import {Enemy} from "./Enemy.js";
 import {Sword} from "./Sword.js";
+import {Drop} from "./Drop.js";
 
 export class Game {
     constructor(width, height) {
@@ -21,6 +22,8 @@ export class Game {
 
         this.weapons = []
         this.weapons.push(new Sword(this));
+
+        this.drops = [];
 
         console.log("Game initiated: " + this.width + "x" + this.height + "");
     }
@@ -44,6 +47,10 @@ export class Game {
         this.weapons.forEach(weapons => {
             weapons.update(deltaTime);
         })
+
+        this.drops.forEach(drop => drop.update())
+        this.drops = this.drops.filter(drop => !drop.markedForDeletion);
+
     }
 
     draw(context) {
@@ -62,6 +69,8 @@ export class Game {
             weapon.draw(context);
         })
 
+        this.drops.forEach(drop => drop.draw(context));
+
         // joystick
         if(this.input.touchActive) {
             // joystick base
@@ -76,6 +85,16 @@ export class Game {
             context.fillStyle = 'rgba(255, 255, 255, 0.8)';
             context.arc(this.input.touchStartX + (this.input.x * 50), this.input.touchStartY + (this.input.y * 50), 20, 0, Math.PI * 2);
             context.fill();
+        }
+    }
+    spawnDrop(x, y) {
+        const chance = Math.random();
+
+        if (chance < 0.8) {
+            this.drops.push(new Drop(this, x, y, 'xp'))
+        }
+        else {
+            this.drops.push(new Drop(this, x, y, 'gold'))
         }
     }
 
