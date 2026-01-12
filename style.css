@@ -6,8 +6,80 @@ body, html {
     background-color: #000;
     overflow: hidden;
     touch-action: none;
+    font-family: 'Arial', sans-serif;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#game-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 canvas {
     display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#levelup-screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background: rgba(0, 0, 0, 0.95);
+    border: 3px solid gold;
+    border-radius: 12px;
+    padding: 20px;
+    width: 300px;
+
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+
+    z-index: 100;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.upgrade-btn {
+    background: #333;
+    border: 2px solid #555;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    text-align: left;
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+.upgrade-btn:hover {
+    background: #444;
+    border-color: #00FFFF;
+    transform: scale(1.02);
+}
+
+.upgrade-btn h3 {
+    margin: 0 0 5px 0;
+    color: gold;
+    font-size: 18px;
+}
+
+.upgrade-btn p {
+    margin: 0;
+    color: #ccc;
+    font-size: 14px;
 }

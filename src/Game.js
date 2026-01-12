@@ -6,12 +6,12 @@ import {Sword} from "./Sword.js";
 import {Drop} from "./Drop.js";
 import {UI} from "./UI.js";
 import {SpatialGrid} from "./SpatialGrid.js";
+import {UpgradeManager} from "./UpgradeManager.js";
 
 export class Game {
     constructor(width, height) {
         this.width = width;
         this.height = height;
-        this.lastTime = 0;
         this.isPaused = false;
         this.gameOver = false;
 
@@ -30,6 +30,10 @@ export class Game {
         this.player = new Player(this);
         this.background = new Background(this);
         this.ui = new UI(this);
+        this.upgradeManager = new UpgradeManager(this);
+
+        this.levelUpScreen = document.getElementById('levelup-screen');
+        this.optionsContainer = document.getElementById('options-container');
 
         this.grid = new SpatialGrid(300);
 
@@ -37,16 +41,19 @@ export class Game {
         this.enemyTimer = 0;
         this.enemyInterval = 1000; // ms
 
-        this.weapons = []
+        this.weapons = [];
         this.weapons.push(new Sword(this));
 
+        this.projectiles = [];
+
         this.drops = [];
+
 
         console.log("Game initiated: " + this.width + "x" + this.height + "");
     }
 
     update(deltaTime) {
-        if (this.gameOver) return;
+        if (this.gameOver || this.isPaused) return;
 
         this.input.update();
         this.player.update(this.input, deltaTime);
@@ -88,6 +95,9 @@ export class Game {
             weapons.update(deltaTime);
         })
 
+        this.projectiles.forEach(p => p.update(deltaTime));
+        this.projectiles = this.projectiles.filter(p => !p.markedForDeletion);
+
         this.drops.forEach(drop => drop.update())
         this.drops = this.drops.filter(drop => !drop.markedForDeletion);
 
@@ -99,6 +109,8 @@ export class Game {
 
         this.background.draw(context);
 
+        this.drops.forEach(drop => drop.draw(context));
+
         this.enemies.forEach(enemy => {
             enemy.draw(context);
         });
@@ -109,7 +121,7 @@ export class Game {
             weapon.draw(context);
         })
 
-        this.drops.forEach(drop => drop.draw(context));
+        this.projectiles.forEach(p => p.draw(context));
 
         // joystick
         if(this.input.touchActive && !this.gameOver) {
@@ -140,5 +152,35 @@ export class Game {
         }
     }
 
+    triggerLevelUp() {
+        this.isPaused = true;
+        this.levelUpScreen.classList.remove('hidden');
+        this.optionsContainer.innerHTML = '';
+
+        const options = this.upgradeManager.getOptions(3);
+
+        options.forEach(upgrade => {
+            const btn = document.createElement('div');
+            btn.className = 'upgrade-btn';
+            btn.innerHTML = `
+                <h3>${upgrade.name}</h3>
+                <p>${upgrade.desc}</p>
+            `;
+
+            btn.addEventListener('click', () => {
+                this.selectUpgrade(upgrade);
+            });
+
+            this.optionsContainer.appendChild(btn);
+        });
+    }
+
+    selectUpgrade(upgrade) {
+        console.log("Selected upgrade: " + upgrade.name);
+        upgrade.apply(this);
+
+        this.levelUpScreen.classList.add('hidden');
+        this.isPaused = false;
+    }
 }
 
