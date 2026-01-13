@@ -7,6 +7,7 @@ import {Drop} from "./Drop.js";
 import {UI} from "./UI.js";
 import {SpatialGrid} from "./SpatialGrid.js";
 import {UpgradeManager} from "./UpgradeManager.js";
+import {Boss} from "./Boss.js";
 
 export class Game {
     constructor(width, height, dataManager) {
@@ -14,6 +15,14 @@ export class Game {
         this.height = height;
         this.isPaused = false;
         this.gameOver = false;
+
+        this.level = 1;
+
+        this.levelDuration = 180000;
+        this.levelTimer = 0;
+        this.bossSpawned = false;
+        this.boss = null;
+        this.arena = null;
 
         this.dataManager = dataManager;
 
@@ -36,6 +45,12 @@ export class Game {
 
         this.levelUpScreen = document.getElementById('levelup-screen');
         this.optionsContainer = document.getElementById('options-container');
+
+        this.victoryScreen = document.getElementById('victory-screen');
+        this.victoryScreen = document.getElementById('victory-screen');
+        document.getElementById('next-level-btn').addEventListener('click', () => {
+            location.reload();
+        });
 
         this.gameOverScreen = document.getElementById('game-over-screen');
         this.restartBtn = document.getElementById('restart-btn');
@@ -68,13 +83,34 @@ export class Game {
         this.input.update();
         this.player.update(this.input, deltaTime);
 
-        if (this.enemyTimer > this.enemyInterval) {
-            const isFox = Math.random() < 0.5;
-            const enemyImage = isFox ? this.enemyFoxImage : this.enemyBirdImage;
-            this.enemies.push(new Enemy(this, enemyImage));
-            this.enemyTimer = 0;
+        if(!this.bossSpawned) {
+            this.levelTimer += deltaTime;
+
+            if (this.enemyTimer > this.enemyInterval) {
+                const isFox = Math.random() < 0.5;
+                const enemyImage = isFox ? this.enemyFoxImage : this.enemyBirdImage;
+                this.enemies.push(new Enemy(this, enemyImage));
+                this.enemyTimer = 0;
+            } else {
+                this.enemyTimer += deltaTime;
+            }
+
+            if (this.levelTimer >= this.levelDuration) {
+                this.spawnBoss();
+            }
         } else {
-            this.enemyTimer += deltaTime;
+            if (this.boss) this.boss.update(deltaTime);
+        }
+
+        if (this.arena) {
+            this.player.worldX = Math.max(
+                this.arena.x + this.player.radius,
+                Math.min(this.player.worldX, this.arena.x + this.arena.width - this.player.radius)
+            );
+            this.player.worldY = Math.max(
+                this.arena.y + this.player.radius,
+                Math.min(this.player.worldY, this.arena.y + this.arena.height - this.player.radius)
+            );
         }
 
         this.grid.clear();
@@ -83,6 +119,10 @@ export class Game {
             enemy.update(deltaTime);
             this.grid.add(enemy);
         })
+        if (this.boss && this.boss.state !== 'dead') {
+            this.grid.add(this.boss);
+        }
+
         this.enemies = this.enemies.filter(enemy => !enemy.markedForDeletion);
 
         const nearbyEnemies = this.grid.getNearby(this.player.worldX, this.player.worldY);
@@ -119,11 +159,25 @@ export class Game {
 
         this.background.draw(context);
 
+        if (this.arena) {
+            context.save();
+            const screenX = (this.arena.x - this.player.worldX) + this.width / 2;
+            const screenY = (this.arena.y - this.player.worldY) + this.height / 2;
+
+            context.strokeStyle = '#8B0000';
+            context.lineWidth = 10;
+            context.strokeRect(screenX, screenY, this.arena.width, this.arena.height);
+
+            context.restore();
+        }
+
         this.drops.forEach(drop => drop.draw(context));
 
         this.enemies.forEach(enemy => {
             enemy.draw(context);
         });
+
+        if (this.boss) this.boss.draw(context);
 
         this.player.draw(context);
 
@@ -150,7 +204,44 @@ export class Game {
         }
 
         this.ui.draw(context);
+        //todo move this to ui class
+        if (!this.bossSpawned) {
+            const timeLeft = Math.max(0, this.levelDuration - this.levelTimer);
+            const minutes = Math.floor(timeLeft / 60000);
+            const seconds = Math.floor((timeLeft % 60000) / 1000).toString().padStart(2, '0');
+
+            context.fillStyle = 'white';
+            context.font = '30px Arial';
+            context.textAlign = 'center';
+            context.fillText(`${minutes}:${seconds}`, this.width / 2, 50);
+        } else {
+            context.fillStyle = 'red';
+            context.font = '30px Arial';
+            context.textAlign = 'center';
+            context.fillText(`BOSS FIGHT`, this.width / 2, 50);
+        }
     }
+
+    spawnBoss() {
+        this.bossSpawned = true;
+
+        this.enemies = [];
+        this.grid.clear();
+
+        this.boss = new Boss(this);
+
+        const arenaWidth = 1000;
+        const arenaHeight = 800;
+        this.arena = {
+            x: this.player.worldX - arenaWidth / 2,
+            y: this.player.worldY - arenaHeight / 2,
+            width: arenaWidth,
+            height: arenaHeight
+        }
+
+        console.log("Boss spawned, arena closed")
+    }
+
     spawnDrop(x, y) {
         const chance = Math.random();
 
@@ -198,6 +289,11 @@ export class Game {
         this.dataManager.addGold(this.player.gold);
         this.gameOverScreen.classList.remove('hidden');
         this.scoreText.innerText = "Level Reached: " + this.player.level;
+    }
+
+    triggerVictory() {
+        this.isPaused = true;
+        this.victoryScreen.classList.remove('hidden');
     }
 }
 

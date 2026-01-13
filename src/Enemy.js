@@ -11,7 +11,6 @@ export class Enemy {
 
         this.speed = 0.5;
         this.radius = 15;
-        this.color = 'red'
 
         this.maxHp = 30;
         this.hp = this.maxHp;
@@ -37,7 +36,7 @@ export class Enemy {
             this.sprite.update(deltaTime || 16);
         }
 
-        let direction = 0;
+        let direction;
         if (Math.abs(dx) > Math.abs(dy)) {
             if (dx > 0) direction = 2; // right
             else direction = 3;        // left
