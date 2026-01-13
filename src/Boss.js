@@ -7,11 +7,12 @@ export class Boss {
         this.worldX = this.game.player.worldX + 400;
         this.worldY = this.game.player.worldY;
 
-        this.speed = 0.8;
+        this.speed = 0.6;
         this.radius = 40;
         this.hp = 500 + (this.game.level * 200);
         this.maxHp = this.hp;
-        this.damage = 20;
+        this.damage = 0;
+        this.attackDamage = 20;
 
         const frameWidth = 32;
         const frameHeight = 32;
@@ -34,24 +35,21 @@ export class Boss {
         this.spriteAttack.fps = 10;
         this.spriteAttack.maxFrame = 4;
         this.spriteDeath.loop = false;
+        this.spriteDeath.maxFrame = 5;
 
         this.state = 'chase'; // chase, attack, dead
-        this.attackRange = 60;
-        this.attackCooldown = 2000;
+        this.attackRange = 70;
+        this.attackCooldown = 1500;
         this.attackTimer = 0;
         this.markedForDeletion = false;
 
-        this.facing = 0 // 0: Down, 1: Up, 2: left, 3: right
+        this.facing = 0 // 0 down 1 up 2 left 3 right
     }
 
     update(deltaTime) {
         if (this.state === 'dead') {
             this.spriteDeath.frameY = this.facing;
             this.spriteDeath.update(deltaTime);
-            // oprional markedForDeletion
-            if (this.spriteDeath.isFinished) {
-                this.markedForDeletion = true;
-            }
             return;
         }
 
@@ -60,11 +58,11 @@ export class Boss {
         const distance = Math.hypot(dx, dy);
 
         if (Math.abs(dx) > Math.abs(dy)) {
-            if (dx > 0) this.facing = 3; // Right
-            else this.facing = 2;        // Left
+            if (dx > 0) this.facing = 3; // right
+            else this.facing = 2;        // left
         } else {
-            if (dy > 0) this.facing = 0; // Down
-            else this.facing = 1;        // Up
+            if (dy > 0) this.facing = 0; // down
+            else this.facing = 1;        // up
         }
 
         if (this.state === 'attack') {
@@ -72,8 +70,8 @@ export class Boss {
             this.spriteAttack.update(deltaTime);
 
             if (this.spriteAttack.frameX === 3 && !this.hasDealtDamage) {
-                if (distance < this.attackRange + 20) {
-                    this.game.player.takeDamage(this.damage);
+                if (distance < this.attackRange + 40) {
+                    this.game.player.takeDamage(this.attackDamage);
                 }
                 this.hasDealtDamage = true;
             }
@@ -100,10 +98,6 @@ export class Boss {
                     this.spriteRun.frameX = 0;
                 }
             }
-        }
-
-        if (distance < this.radius + this.game.player.radius) {
-            this.game.player.takeDamage(this.damage); // Continuous contact damage
         }
 
         if (this.game.arena) {

@@ -13,15 +13,24 @@ export class Sprite {
         this.fps = 15;
         this.frameInterval = 1000 / this.fps;
         this.frameTimer = 0;
+
+        this.loop = true;
+        this.isFinished = false;
     }
 
     update(deltaTime) {
+        if(!this.loop && this.isFinished) return;
+
         if (this.frameTimer > this.frameInterval) {
             this.frameTimer = 0;
             if (this.frameX < this.maxFrame) {
                 this.frameX++;
             } else {
-                this.frameX = 0;
+                if (this.loop) {
+                    this.frameX = 0;
+                } else {
+                    this.isFinished = true;
+                }
             }
         } else {
             this.frameTimer += deltaTime;

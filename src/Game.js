@@ -18,7 +18,7 @@ export class Game {
 
         this.level = 1;
 
-        this.levelDuration = 1000;//180000;
+        this.levelDuration = 180000;
         this.levelTimer = 0;
         this.bossSpawned = false;
         this.boss = null;
