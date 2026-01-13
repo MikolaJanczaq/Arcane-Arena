@@ -6,7 +6,9 @@ export class Player {
         this.worldX = 0;
         this.worldY = 0;
 
-        this.speed = 1 ;
+        const upgrades = this.game.dataManager.data.upgrades;
+
+        this.speed = 1 + (upgrades.speed * 0.2);
         this.radius = 20;
 
         this.experience = 0;
@@ -14,7 +16,7 @@ export class Player {
         this.gold = 0;
         this.level = 1;
 
-        this.maxHp = 100;
+        this.maxHp = 100 + (upgrades.health * 20);
         this.hp = this.maxHp;
 
         this.invulnerable = false;
