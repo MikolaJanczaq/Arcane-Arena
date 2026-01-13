@@ -1,4 +1,4 @@
-import {Sprite} from "./Sprite.js";
+import {Sprite} from "../graphics/Sprite.js";
 
 export class Enemy {
     constructor(game, image) {

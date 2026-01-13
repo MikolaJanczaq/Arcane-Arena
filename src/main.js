@@ -1,5 +1,5 @@
-import { Game } from "./Game.js";
-import { DataManager } from "./DataManager.js";
+import { Game } from "./core/Game.js";
+import { DataManager } from "./systems/DataManager.js";
 
 let game = null;
 let lastTime = 0;
@@ -52,7 +52,7 @@ function setupShopButtons() {
 
 function startGame() {
     document.getElementById('main-menu').classList.add('hidden');
-    document.getElementById('game-over-screen').classList.add('hidden'); // Na wszelki wypadek
+    document.getElementById('game-over-screen').classList.add('hidden');
 
     const canvas = document.getElementById("gameCanvas");
     // const context = canvas.getContext("2d"); //todo dont know
