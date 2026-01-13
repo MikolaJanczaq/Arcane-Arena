@@ -35,6 +35,14 @@ export class Game {
         this.levelUpScreen = document.getElementById('levelup-screen');
         this.optionsContainer = document.getElementById('options-container');
 
+        this.gameOverScreen = document.getElementById('game-over-screen');
+        this.restartBtn = document.getElementById('restart-btn');
+        this.scoreText = document.getElementById('score-text');
+        this.restartBtn.addEventListener('click', () => {
+            // TODO refactor to send player to menu
+            location.reload();
+        });
+
         this.grid = new SpatialGrid(300);
 
         this.enemies = [];
@@ -181,6 +189,12 @@ export class Game {
 
         this.levelUpScreen.classList.add('hidden');
         this.isPaused = false;
+    }
+
+    triggerGameOver() {
+        this.gameOver = true;
+        this.gameOverScreen.classList.remove('hidden');
+        this.scoreText.innerText = "Level Reached: " + this.player.level;
     }
 }
 
