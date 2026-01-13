@@ -109,7 +109,7 @@ export class Player {
         this.level++;
         this.experience -= this.experienceToNextLevel;
         this.experienceToNextLevel = Math.floor(this.experienceToNextLevel * 1.2);
-        this.hp = this.maxHp;
+        // this.hp = this.maxHp;
         console.log("Level Up! Level: " + this.level);
         this.game.triggerLevelUp();
     }
@@ -120,7 +120,7 @@ export class Player {
         this.hp -= amount;
         this.invulnerable = true;
         if (this.hp <= 0) {
-            this.game.gameOver = true;
+            this.game.triggerGameOver();
         }
     }
 
