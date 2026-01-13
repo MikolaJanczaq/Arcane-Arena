@@ -53,12 +53,7 @@ export class Game {
         });
 
         this.gameOverScreen = document.getElementById('game-over-screen');
-        this.restartBtn = document.getElementById('restart-btn');
         this.scoreText = document.getElementById('score-text');
-        this.restartBtn.addEventListener('click', () => {
-            // TODO refactor to send player to menu
-            location.reload();
-        });
 
         this.grid = new SpatialGrid(300);
 
@@ -204,22 +199,6 @@ export class Game {
         }
 
         this.ui.draw(context);
-        //todo move this to ui class
-        if (!this.bossSpawned) {
-            const timeLeft = Math.max(0, this.levelDuration - this.levelTimer);
-            const minutes = Math.floor(timeLeft / 60000);
-            const seconds = Math.floor((timeLeft % 60000) / 1000).toString().padStart(2, '0');
-
-            context.fillStyle = 'white';
-            context.font = '30px Arial';
-            context.textAlign = 'center';
-            context.fillText(`${minutes}:${seconds}`, this.width / 2, 50);
-        } else {
-            context.fillStyle = 'red';
-            context.font = '30px Arial';
-            context.textAlign = 'center';
-            context.fillText(`BOSS FIGHT`, this.width / 2, 50);
-        }
     }
 
     spawnBoss() {

@@ -15,7 +15,6 @@ export class UI {
         ctx.fillStyle = 'rgba(0,0,0,0.5)';
         ctx.fillRect(0, 0, xpBarWidth, xpBarHeight);
 
-
         const xpPercent = this.game.player.experience / this.game.player.experienceToNextLevel;
         ctx.fillStyle = '#00FFFF';
         ctx.fillRect(0, 0, xpBarWidth * xpPercent, xpBarHeight);
@@ -43,6 +42,22 @@ export class UI {
         ctx.strokeStyle = 'white';
         ctx.lineWidth = 1;
         ctx.strokeRect(hpBarX, hpBarY, hpBarW, hpBarH);
+
+        if (!this.game.bossSpawned) {
+            const timeLeft = Math.max(0, this.game.levelDuration - this.game.levelTimer);
+            const minutes = Math.floor(timeLeft / 60000);
+            const seconds = Math.floor((timeLeft % 60000) / 1000).toString().padStart(2, '0');
+
+            ctx.fillStyle = 'white';
+            ctx.font = '30px ' + this.fontFamily;
+            ctx.textAlign = 'center';
+            ctx.fillText(`${minutes}:${seconds}`, this.game.width / 2, 80);
+        } else {
+            ctx.fillStyle = 'red';
+            ctx.font = '30px ' + this.fontFamily;
+            ctx.textAlign = 'center';
+            ctx.fillText(`BOSS FIGHT`, this.game.width / 2, 80);
+        }
 
         if (this.game.gameOver) {
             ctx.textAlign = 'center';
