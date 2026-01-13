@@ -9,11 +9,13 @@ import {SpatialGrid} from "./SpatialGrid.js";
 import {UpgradeManager} from "./UpgradeManager.js";
 
 export class Game {
-    constructor(width, height) {
+    constructor(width, height, dataManager) {
         this.width = width;
         this.height = height;
         this.isPaused = false;
         this.gameOver = false;
+
+        this.dataManager = dataManager;
 
         this.playerImage = new Image();
         this.playerImage.src = "assets/player/Swordsman_Walk.png";
@@ -193,6 +195,7 @@ export class Game {
 
     triggerGameOver() {
         this.gameOver = true;
+        this.dataManager.addGold(this.player.gold);
         this.gameOverScreen.classList.remove('hidden');
         this.scoreText.innerText = "Level Reached: " + this.player.level;
     }
