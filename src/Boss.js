@@ -30,7 +30,9 @@ export class Boss {
         this.spriteDeath = new Sprite(this.game, this.imageDeath, frameWidth, frameHeight);
 
         this.spriteRun.fps = 10;
+        this.spriteRun.maxFrame = 4;
         this.spriteAttack.fps = 10;
+        this.spriteAttack.maxFrame = 4;
         this.spriteDeath.loop = false;
 
         this.state = 'chase'; // chase, attack, dead
