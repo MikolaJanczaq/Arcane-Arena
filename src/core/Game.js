@@ -1,13 +1,13 @@
 import {InputHandler} from "./InputHandler.js";
-import {Player} from "./Player.js";
-import {Background} from "./Background.js";
-import {Enemy} from "./Enemy.js";
-import {Sword} from "./Sword.js";
-import {Drop} from "./Drop.js";
-import {UI} from "./UI.js";
+import {Player} from "../entities/Player.js";
+import {Background} from "../graphics/Background.js";
+import {Enemy} from "../entities/Enemy.js";
+import {Sword} from "../weapons/Sword.js";
+import {Drop} from "../entities/Drop.js";
+import {UI} from "../graphics/UI.js";
 import {SpatialGrid} from "./SpatialGrid.js";
-import {UpgradeManager} from "./UpgradeManager.js";
-import {Boss} from "./Boss.js";
+import {UpgradeManager} from "../systems/UpgradeManager.js";
+import {Boss} from "../entities/Boss.js";
 
 export class Game {
     constructor(width, height, dataManager) {
@@ -46,7 +46,6 @@ export class Game {
         this.levelUpScreen = document.getElementById('levelup-screen');
         this.optionsContainer = document.getElementById('options-container');
 
-        this.victoryScreen = document.getElementById('victory-screen');
         this.victoryScreen = document.getElementById('victory-screen');
         document.getElementById('next-level-btn').addEventListener('click', () => {
             location.reload();

@@ -1,6 +1,6 @@
-import { Sword } from "./Sword.js";
-import { MagicWand } from "./MagicWand.js";
-import { RotatingBlades } from "./RotatingBlades.js";
+import { Sword } from "../weapons/Sword.js";
+import { MagicWand } from "../weapons/MagicWand.js";
+import { RotatingBlades } from "../weapons/RotatingBlades.js";
 
 export class UpgradeManager {
     constructor(game) {

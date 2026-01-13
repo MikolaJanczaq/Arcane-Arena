@@ -1,4 +1,4 @@
-import { db, doc, setDoc, getDoc } from "./FirebaseConfig.js";
+import { db, doc, setDoc, getDoc } from "../config/FirebaseConfig.js";
 
 export class DataManager {
     constructor() {
