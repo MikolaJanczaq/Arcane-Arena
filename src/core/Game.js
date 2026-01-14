@@ -1,13 +1,14 @@
 import {InputHandler} from "./InputHandler.js";
 import {Player} from "../entities/Player.js";
 import {Background} from "../graphics/Background.js";
-import {Enemy} from "../entities/Enemy.js";
+import {Fox} from "../entities/Fox.js";
+import {Bird} from "../entities/Bird.js";
+import {Boss} from "../entities/Boss.js";
 import {Sword} from "../weapons/Sword.js";
 import {Drop} from "../entities/Drop.js";
 import {UI} from "../graphics/UI.js";
 import {SpatialGrid} from "./SpatialGrid.js";
 import {UpgradeManager} from "../systems/UpgradeManager.js";
-import {Boss} from "../entities/Boss.js";
 
 export class Game {
     constructor(width, height, dataManager) {
@@ -31,12 +32,6 @@ export class Game {
         this.playerAttackImage = new Image();
         this.playerAttackImage.src = "assets/player/Swordsman_Walk_Attack.png";
 
-        this.enemyFoxImage = new Image();
-        this.enemyFoxImage.src = "assets/enemies/Fox/Fox_Run.png"
-
-        this.enemyBirdImage = new Image();
-        this.enemyBirdImage.src = "assets/enemies/Bird/Bird_Flight.png"
-
         this.input = new InputHandler();
         this.player = new Player(this);
         this.background = new Background(this);
@@ -53,7 +48,7 @@ export class Game {
 
         this.enemies = [];
         this.enemyTimer = 0;
-        this.enemyInterval = 1000;
+        this.enemyInterval = 1000; // ms
 
         this.weapons = [];
         this.weapons.push(new Sword(this));
@@ -61,7 +56,6 @@ export class Game {
         this.projectiles = [];
 
         this.drops = [];
-
 
         console.log("Game initiated: " + this.width + "x" + this.height + "");
     }
@@ -77,8 +71,11 @@ export class Game {
 
             if (this.enemyTimer > this.enemyInterval) {
                 const isFox = Math.random() < 0.5;
-                const enemyImage = isFox ? this.enemyFoxImage : this.enemyBirdImage;
-                this.enemies.push(new Enemy(this, enemyImage));
+                if (isFox) {
+                    this.enemies.push(new Fox(this));
+                } else {
+                    this.enemies.push(new Bird(this));
+                }
                 this.enemyTimer = 0;
             } else {
                 this.enemyTimer += deltaTime;
