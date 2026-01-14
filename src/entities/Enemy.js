@@ -22,9 +22,11 @@ export class Enemy {
             attempts++;
         }
 
-        this.speed = 0.5;
+        this.difficultyMultiplier = 1 + ((this.game.worldLevel - 1) * 0.2);
+
+        this.speed = 0.5 + (this.game.worldLevel * 0.05);
         this.radius = 15;
-        this.maxHp = 10;
+        this.maxHp = 10 * this.difficultyMultiplier;
         this.hp = this.maxHp;
         this.xpValue = 10;
 

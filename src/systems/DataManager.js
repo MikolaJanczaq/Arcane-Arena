@@ -3,6 +3,7 @@ import { db, doc, setDoc, getDoc } from "../config/FirebaseConfig.js";
 export class DataManager {
     constructor() {
         this.data = {
+            currentLevel: 1,
             gold: 0,
             upgrades: {
                 damage: 0,
@@ -19,16 +20,19 @@ export class DataManager {
     }
 
     async loadData() {
-        console.log("Loading data from Firebase...");
+        console.log("Loading data from Firebase");
         const docRef = doc(db, "players", this.userId);
-        const docSnap = await getDoc(docRef);
 
         try {
+            const docSnap = await getDoc(docRef);
+
             if (docSnap.exists()) {
-                this.data = docSnap.data();
+                const loadedData = docSnap.data();
+                this.data = { ...this.data, ...loadedData };
+
                 console.log("Data loaded", this.data);
             } else {
-                console.log("New player - saving default data");
+                console.log("New player");
                 await this.saveData();
             }
         } catch (e) {
@@ -44,6 +48,15 @@ export class DataManager {
 
     addGold(amount) {
         this.data.gold += amount;
+        this.saveData();
+    }
+
+    completeLevel(goldReward) {
+        this.data.gold += goldReward;
+
+        if (!this.data.currentLevel) this.data.currentLevel = 1;
+        this.data.currentLevel++;
+
         this.saveData();
     }
 

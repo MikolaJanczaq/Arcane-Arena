@@ -11,8 +11,6 @@ let scale = 1;
 const dataManager = new DataManager();
 
 window.addEventListener("load", async function () {
-    const canvas = document.getElementById("gameCanvas");
-
     resizeCanvas();
 
     await dataManager.loadData();
@@ -57,6 +55,7 @@ function resizeCanvas() {
 
 function updateUI() {
     document.getElementById('menu-gold').innerText = dataManager.data.gold;
+    document.getElementById('menu-world-level').innerText = dataManager.data.currentLevel;
     updateShopButton('damage');
     updateShopButton('health');
     updateShopButton('speed');

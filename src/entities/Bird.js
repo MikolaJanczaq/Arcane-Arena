@@ -5,10 +5,10 @@ export class Bird extends Enemy {
     constructor(game) {
         super(game);
 
-        this.speed = 0.8;
-        this.maxHp = 20;
+        this.speed = 0.7 + (this.game.worldLevel * 0.05);
+        this.maxHp = 20 * this.difficultyMultiplier;
         this.hp = this.maxHp;
-        this.damage = 8;
+        this.damage = 8 * this.difficultyMultiplier;
         this.radius = 15;
 
         this.directionMap = {
