@@ -215,7 +215,7 @@ canvas {
     }
 
     #play-btn {
-        width: 90%;
+        width: 80%;
         max-width: none;
         font-size: 28px;
         padding: 25px 0;
@@ -237,7 +237,7 @@ canvas {
 
 
     #levelup-screen, #game-over-screen, #victory-screen {
-        width: 85%;
+        width: 75%;
         padding: 25px;
     }
 
