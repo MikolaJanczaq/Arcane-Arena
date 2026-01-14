@@ -6,7 +6,7 @@ body, html {
     background-color: #0f0e0d;
     overflow: hidden;
     touch-action: none;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Courier New', Courier, monospace;
     user-select: none;
 
     display: flex;
@@ -52,7 +52,7 @@ canvas {
     color: #a93226;
     text-transform: uppercase;
     letter-spacing: 4px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     border-bottom: 3px solid #5d4037;
     text-shadow: 4px 4px 0 #000;
     text-align: center;
@@ -63,7 +63,7 @@ canvas {
 .gold-display {
     font-size: 22px;
     color: #d4ac0d;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     font-family: Arial, sans-serif;
     text-shadow: 2px 2px 0 #000;
     background: #211b19;
@@ -72,18 +72,23 @@ canvas {
     border-radius: 4px;
 }
 
+.menu-buttons {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
 .menu-btn {
     padding: 18px 50px;
     font-size: 24px;
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
     text-transform: uppercase;
-
     background: #263238;
     color: #eceff1;
     border: 2px solid #546e7a;
     box-shadow: 0 5px 0 #10161a;
-
     cursor: pointer;
     transition: all 0.1s;
     width: 280px;
@@ -107,13 +112,14 @@ canvas {
 }
 
 .shop-container {
-    margin-top: 40px;
-    width: 360px;
+    margin-top: 20px;
+    width: 400px;
     max-width: 100%;
     background: #1e1b19;
     padding: 20px;
     border: 2px solid #3e2723;
     box-shadow: 0 0 15px rgba(0,0,0,1);
+    box-sizing: border-box;
 }
 
 .shop-container h2 {
@@ -146,62 +152,14 @@ canvas {
     font-size: 16px;
 }
 
-.shop-lvl {
-    color: #666;
-    font-size: 11px;
-    margin-top: 4px;
-}
+.shop-lvl { color: #666; font-size: 11px; margin-top: 4px; }
 
 .shop-btn {
-    background: #3e2723;
-    color: #d7ccc8;
-    border: 1px solid #5d4037;
-    padding: 8px 12px;
-    min-width: 60px;
-    cursor: pointer;
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
+    background: #3e2723; color: #d7ccc8; border: 1px solid #5d4037;
+    padding: 8px 12px; min-width: 60px; cursor: pointer;
+    font-family: 'Courier New', monospace; font-weight: bold;
 }
-
-.shop-btn:hover {
-    background: #5d4037;
-    color: #fff;
-    border-color: #8d6e63;
-}
-
-.shop-btn:disabled {
-    background: #181514;
-    color: #444;
-    border-color: #222;
-    cursor: not-allowed;
-}
-
-@media (max-width: 600px) {
-
-    .game-title {
-        font-size: 40px;
-        width: 100%;
-    }
-
-    .menu-buttons {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
-
-    #play-btn {
-        width: 80%;
-        max-width: none;
-        font-size: 26px;
-        padding: 20px 0;
-    }
-
-    .shop-container {
-        width: 95%;
-        box-sizing: border-box;
-    }
-}
+.shop-btn:disabled { background: #181514; color: #444; border-color: #222; }
 
 #levelup-screen, #game-over-screen, #victory-screen {
     position: absolute;
@@ -210,30 +168,105 @@ canvas {
     background: rgba(18, 16, 14, 0.98);
     border: 2px solid #a93226;
     padding: 30px;
-    width: 300px;
+    width: 350px;
     text-align: center;
     color: white;
     z-index: 200;
     box-shadow: 0 0 40px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 #levelup-screen { border-color: #76ff03; }
 #victory-screen { border-color: #f1c40f; }
 
 #options-container {
-    display: flex; flex-direction: column; gap: 10px; margin-top: 15px;
+    display: flex; flex-direction: column; gap: 10px; margin-top: 10px;
 }
 
 .upgrade-btn {
     background: #212121;
     border: 1px solid #424242;
-    padding: 12px;
+    padding: 15px;
     cursor: pointer;
     text-align: left;
 }
-.upgrade-btn:hover {
-    background: #333;
-    border-color: #76ff03;
+.upgrade-btn h3 { margin: 0 0 5px 0; color: #eee; font-size: 18px; }
+.upgrade-btn p { margin: 0; color: #888; font-size: 14px; }
+
+
+
+@media (max-width: 800px) {
+
+    #main-menu {
+        padding: 10px;
+    }
+
+    .game-title {
+        font-size: 40px;
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    .gold-display {
+        font-size: 24px;
+        padding: 10px 30px;
+    }
+
+    #play-btn {
+        width: 90%;
+        max-width: none;
+        font-size: 28px;
+        padding: 25px 0;
+    }
+
+    .shop-container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .shop-item {
+        padding: 15px;
+    }
+
+    .shop-btn {
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+
+
+    #levelup-screen, #game-over-screen, #victory-screen {
+        width: 85%;
+        padding: 25px;
+    }
+
+    #levelup-screen h2, #game-over-screen h1, #victory-screen h1 {
+        font-size: 32px;
+        margin-bottom: 15px;
+    }
+
+    #score-text, #victory-screen p {
+        font-size: 20px;
+    }
+
+    .upgrade-btn {
+        padding: 20px;
+    }
+
+    .upgrade-btn h3 {
+        font-size: 22px;
+    }
+
+    .upgrade-btn p {
+        font-size: 16px;
+    }
+
+    #restart-btn, #next-level-btn {
+        width: 100%;
+        padding: 20px 0;
+        font-size: 22px;
+        margin-top: 15px;
+        box-sizing: border-box;
+    }
 }
-.upgrade-btn h3 { margin: 0 0 5px 0; color: #eee; font-size: 16px; }
-.upgrade-btn p { margin: 0; color: #888; font-size: 12px; }
