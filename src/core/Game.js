@@ -45,12 +45,7 @@ export class Game {
 
         this.levelUpScreen = document.getElementById('levelup-screen');
         this.optionsContainer = document.getElementById('options-container');
-
         this.victoryScreen = document.getElementById('victory-screen');
-        document.getElementById('next-level-btn').addEventListener('click', () => {
-            location.reload();
-        });
-
         this.gameOverScreen = document.getElementById('game-over-screen');
         this.scoreText = document.getElementById('score-text');
 
@@ -58,7 +53,7 @@ export class Game {
 
         this.enemies = [];
         this.enemyTimer = 0;
-        this.enemyInterval = 1000; // ms
+        this.enemyInterval = 1000;
 
         this.weapons = [];
         this.weapons.push(new Sword(this));
@@ -158,7 +153,7 @@ export class Game {
             const screenX = (this.arena.x - this.player.worldX) + this.width / 2;
             const screenY = (this.arena.y - this.player.worldY) + this.height / 2;
 
-            context.strokeStyle = '#8B0000';
+            context.strokeStyle = '#a93226';
             context.lineWidth = 10;
             context.strokeRect(screenX, screenY, this.arena.width, this.arena.height);
 
