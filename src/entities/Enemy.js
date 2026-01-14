@@ -2,10 +2,25 @@ export class Enemy {
     constructor(game) {
         this.game = game;
 
-        const spawnRadius = this.game.width * 0.7;
-        const spawnAngle = Math.random() * Math.PI * 2;
-        this.worldX = this.game.player.worldX + Math.cos(spawnAngle) * spawnRadius;
-        this.worldY = this.game.player.worldY + Math.sin(spawnAngle) * spawnRadius;
+        let validPosition = false;
+        let attempts = 0;
+        const maxAttempts = 20;
+
+        while (!validPosition && attempts < maxAttempts) {
+            const spawnRadius = this.game.width * 0.7;
+            const spawnAngle = Math.random() * Math.PI * 2;
+
+            const candidateX = this.game.player.worldX + Math.cos(spawnAngle) * spawnRadius;
+            const candidateY = this.game.player.worldY + Math.sin(spawnAngle) * spawnRadius;
+
+            if (!this.game.collisionMap.isObstacle(candidateX, candidateY)) {
+                this.worldX = candidateX;
+                this.worldY = candidateY;
+                validPosition = true;
+            }
+
+            attempts++;
+        }
 
         this.speed = 0.5;
         this.radius = 15;
