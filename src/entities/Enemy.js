@@ -20,6 +20,9 @@ export class Enemy {
         this.facing = 0;
         this.sprite = null;
 
+        this.checkCollision = false;
+        this.randomPhase = Math.random() * Math.PI * 2;
+
         this.directionMap = {
             down: 0,
             up: 1,
@@ -41,20 +44,45 @@ export class Enemy {
     }
 
     update(deltaTime) {
-        const dx = this.game.player.worldX - this.worldX;
-        const dy = this.game.player.worldY - this.worldY;
-        const distance = Math.hypot(dx, dy);
+        const rawDx = this.game.player.worldX - this.worldX;
+        const rawDy = this.game.player.worldY - this.worldY;
+        const distance = Math.hypot(rawDx, rawDy);
+
+        this.updateFacing(rawDx, rawDy);
 
         if (distance > 0) {
-            this.worldX += dx / distance * this.speed;
-            this.worldY += dy / distance * this.speed;
+            let angle = Math.atan2(rawDy, rawDx);
+
+            if (this.checkCollision) {
+                const wobbleStrength = distance > 100 ? 0.8 : 0.2;
+                angle += Math.sin(this.game.levelTimer * 0.003 + this.randomPhase) * wobbleStrength;
+            }
+
+            const velocityX = Math.cos(angle) * this.speed;
+            const velocityY = Math.sin(angle) * this.speed;
+
+            if (this.checkCollision) {
+                const offsetX = Math.sign(velocityX) * (this.radius * 0.5);
+                const offsetY = Math.sign(velocityY) * (this.radius * 0.5);
+
+                const nextX = this.worldX + velocityX;
+                if (!this.game.collisionMap.isObstacle(nextX + offsetX, this.worldY)) {
+                    this.worldX += velocityX;
+                }
+
+                const nextY = this.worldY + velocityY;
+                if (!this.game.collisionMap.isObstacle(this.worldX, nextY + offsetY)) {
+                    this.worldY += velocityY;
+                }
+            } else {
+                this.worldX += velocityX;
+                this.worldY += velocityY;
+            }
         }
 
         if (this.sprite) {
             this.sprite.update(deltaTime || 16);
         }
-
-        this.updateFacing(dx, dy);
 
         if (this.sprite) {
             this.sprite.frameY = this.facing;
