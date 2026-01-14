@@ -6,7 +6,7 @@ export class Sword extends Weapon {
         this.name = "Sword";
         this.level = 1;
 
-        this.damage = 10;
+        this.damage = 10 + (this.game.player.upgrades.damage * 5);
         this.range = 70;
         this.cooldown = 1000;
         this.timer = 0;
