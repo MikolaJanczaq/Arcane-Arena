@@ -22,7 +22,7 @@ export class InputHandler {
 
             if (e.code === 'Space') {
                 this.shakeCount++;
-                console.log("Shake simulated Count: " + this.shakeCount);
+                // console.log("Shake simulated Count: " + this.shakeCount);
             }
         });
 
@@ -87,7 +87,7 @@ export class InputHandler {
 
                     if (speed > this.shakeThreshold * 100) {
                         this.shakeCount++;
-                        console.log("Device Shake detected! Count: " + this.shakeCount);
+                        // console.log("Device Shake detected! Count: " + this.shakeCount);
                     }
                     this.lastX = acc.x;
                     this.lastY = acc.y;

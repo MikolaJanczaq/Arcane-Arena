@@ -20,7 +20,7 @@ export class DataManager {
     }
 
     async loadData() {
-        console.log("Loading data from Firebase");
+        // console.log("Loading data from Firebase");
         const docRef = doc(db, "players", this.userId);
 
         try {
@@ -30,9 +30,9 @@ export class DataManager {
                 const loadedData = docSnap.data();
                 this.data = { ...this.data, ...loadedData };
 
-                console.log("Data loaded", this.data);
+                // console.log("Data loaded", this.data);
             } else {
-                console.log("New player");
+                // console.log("New player");
                 await this.saveData();
             }
         } catch (e) {
@@ -43,7 +43,7 @@ export class DataManager {
     async saveData() {
         const docRef = doc(db, "players", this.userId);
         await setDoc(docRef, this.data);
-        console.log("Data saved");
+        // console.log("Data saved");
     }
 
     addGold(amount) {

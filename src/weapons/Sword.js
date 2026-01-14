@@ -52,12 +52,12 @@ export class Sword extends Weapon {
             this.damage = 20;
             this.range = 140;
             this.cooldown = 900;
-            console.log("Sword upgraded to Level 2!");
+            // console.log("Sword upgraded to Level 2!");
         } else if (this.level === 3) {
             this.damage = 35;
             this.range = 180;
             this.cooldown = 700;
-            console.log("Sword upgraded to MAX Level!");
+            // console.log("Sword upgraded to MAX Level!");
         }
     }
 

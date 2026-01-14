@@ -47,7 +47,7 @@ export class MagicWand extends Weapon {
     upgrade() {
         this.level++;
         this.cooldown *= 0.85;
-        console.log("Magic Wand upgraded to Level " + this.level + "!")
+        // console.log("Magic Wand upgraded to Level " + this.level + "!")
     }
 
     draw(context) {}

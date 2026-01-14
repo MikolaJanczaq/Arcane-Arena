@@ -23,7 +23,7 @@ export class CollisionMap {
             this.data = ctx.getImageData(0, 0, this.width, this.height).data;
 
             this.isLoaded = true;
-            console.log("Collision Map Loaded. Size: " + this.width + "x" + this.height);
+            // console.log("Collision Map Loaded. Size: " + this.width + "x" + this.height);
         };
     }
 

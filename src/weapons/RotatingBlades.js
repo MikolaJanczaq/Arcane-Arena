@@ -50,7 +50,7 @@ export class RotatingBlades extends Weapon{
             this.range = 140;
             this.rotationSpeed += 0.01;
         }
-        console.log("Rotating Blades upgraded to Level " + this.level);
+        // console.log("Rotating Blades upgraded to Level " + this.level);
     }
 
     draw(context) {

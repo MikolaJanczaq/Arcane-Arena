@@ -46,10 +46,10 @@ export class Drop {
                 this.markedForDeletion = true;
                 if (this.type === 'xp') {
                     this.game.player.experience += this.value;
-                    console.log("XP gained: " + this.game.player.experience);
+                    // console.log("XP gained: " + this.game.player.experience);
                 } else if (this.type === 'gold') {
                     this.game.player.gold += this.value;
-                    console.log("Gold gained: " + this.game.player.gold);
+                    // console.log("Gold gained: " + this.game.player.gold);
                 }
             }
         }

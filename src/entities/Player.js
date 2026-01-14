@@ -104,13 +104,13 @@ export class Player {
     applyFreeze() {
         if (this.isFrozen || this.invulnerable) return;
         this.isFrozen = true;
-        console.log("Player frozen Shake device or press space")
+        // console.log("Player frozen Shake device or press space")
         this.startShakeCount = this.game.input.shakeCount;
     }
 
     unfreeze() {
         this.isFrozen = false;
-        console.log("Player unfrozen")
+        // console.log("Player unfrozen")
         this.invulnerable = true;
         this.invulnerableTimer = 0;
     }
@@ -120,7 +120,7 @@ export class Player {
         this.experience -= this.experienceToNextLevel;
         this.experienceToNextLevel = Math.floor(this.experienceToNextLevel * 1.2);
         // this.hp = this.maxHp;
-        console.log("Level Up! Level: " + this.level);
+        // console.log("Level Up! Level: " + this.level);
         this.game.triggerLevelUp();
     }
 

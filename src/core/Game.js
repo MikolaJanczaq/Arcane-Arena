@@ -57,7 +57,7 @@ export class Game {
 
         this.drops = [];
 
-        console.log("Game initiated: " + this.width + "x" + this.height + "");
+        // console.log("Game initiated: " + this.width + "x" + this.height + "");
     }
 
     update(deltaTime) {
@@ -209,7 +209,7 @@ export class Game {
             height: arenaHeight
         }
 
-        console.log("Boss spawned, arena closed")
+        // console.log("Boss spawned, arena closed")
     }
 
     spawnDrop(x, y) {
@@ -247,7 +247,7 @@ export class Game {
     }
 
     selectUpgrade(upgrade) {
-        console.log("Selected upgrade: " + upgrade.name);
+        // console.log("Selected upgrade: " + upgrade.name);
         upgrade.apply(this);
 
         this.levelUpScreen.classList.add('hidden');
