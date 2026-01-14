@@ -7,6 +7,7 @@ export class Player {
         this.worldY = 0;
 
         const upgrades = this.game.dataManager.data.upgrades;
+        this.upgrades = upgrades;
 
         this.speed = 1 + (upgrades.speed * 0.2);
         this.radius = 20;
