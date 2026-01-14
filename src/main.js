@@ -5,6 +5,9 @@ let game = null;
 let lastTime = 0;
 let animationId = null;
 
+const TARGET_WIDTH = 500;
+let scale = 1;
+
 const dataManager = new DataManager();
 
 window.addEventListener("load", async function () {
@@ -73,7 +76,13 @@ function startGame() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    game = new Game(canvas.width, canvas.height, dataManager);
+    scale = canvas.width / TARGET_WIDTH;
+
+    game = new Game(canvas.width / scale, canvas.height / scale, dataManager);
+
+    if (game.input) {
+        game.input.scale = scale;
+    }
 
     lastTime = 0;
     animate(0);
@@ -81,9 +90,13 @@ function startGame() {
     window.addEventListener('resize', () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+
+        scale = canvas.width / TARGET_WIDTH;
+
         if(game) {
-            game.width = canvas.width;
-            game.height = canvas.height;
+            game.width = canvas.width / scale;
+            game.height = canvas.height / scale;
+            game.input.scale = scale;
         }
     });
 }
@@ -99,8 +112,13 @@ function animate(timestamp) {
 
     context.clearRect(0, 0, canvas.width, canvas.height);
 
+    context.save();
+    context.scale(scale, scale);
+
     game.update(deltaTime);
     game.draw(context);
+
+    context.restore();
 
     if (!game.gameOver) {
         animationId = requestAnimationFrame(animate);
