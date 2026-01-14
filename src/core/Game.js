@@ -9,6 +9,7 @@ import {Drop} from "../entities/Drop.js";
 import {UI} from "../graphics/UI.js";
 import {SpatialGrid} from "./SpatialGrid.js";
 import {UpgradeManager} from "../systems/UpgradeManager.js";
+import {CollisionMap} from "./CollisionMap.js";
 
 export class Game {
     constructor(width, height, dataManager) {
@@ -35,6 +36,7 @@ export class Game {
         this.input = new InputHandler();
         this.player = new Player(this);
         this.background = new Background(this);
+        this.collisionMap = new CollisionMap(this);
         this.ui = new UI(this);
         this.upgradeManager = new UpgradeManager(this);
 
