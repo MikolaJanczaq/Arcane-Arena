@@ -265,6 +265,7 @@ export class Game {
     }
 
     triggerVictory() {
+        this.dataManager.addGold(this.player.gold);
         this.isPaused = true;
         this.victoryScreen.classList.remove('hidden');
     }
