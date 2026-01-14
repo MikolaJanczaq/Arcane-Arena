@@ -53,7 +53,7 @@ export class Game {
 
         this.enemies = [];
         this.enemyTimer = 0;
-        this.enemyInterval = 1000;
+        this.enemyInterval = 1000; // ms
 
         this.weapons = [];
         this.weapons.push(new Sword(this));
