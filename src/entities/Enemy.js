@@ -2,10 +2,25 @@ export class Enemy {
     constructor(game) {
         this.game = game;
 
-        const spawnRadius = this.game.width * 0.7;
-        const spawnAngle = Math.random() * Math.PI * 2;
-        this.worldX = this.game.player.worldX + Math.cos(spawnAngle) * spawnRadius;
-        this.worldY = this.game.player.worldY + Math.sin(spawnAngle) * spawnRadius;
+        let validPosition = false;
+        let attempts = 0;
+        const maxAttempts = 20;
+
+        while (!validPosition && attempts < maxAttempts) {
+            const spawnRadius = this.game.width * 0.7;
+            const spawnAngle = Math.random() * Math.PI * 2;
+
+            const candidateX = this.game.player.worldX + Math.cos(spawnAngle) * spawnRadius;
+            const candidateY = this.game.player.worldY + Math.sin(spawnAngle) * spawnRadius;
+
+            if (!this.game.collisionMap.isObstacle(candidateX, candidateY)) {
+                this.worldX = candidateX;
+                this.worldY = candidateY;
+                validPosition = true;
+            }
+
+            attempts++;
+        }
 
         this.speed = 0.5;
         this.radius = 15;
@@ -19,6 +34,9 @@ export class Enemy {
         this.markedForDeletion = false;
         this.facing = 0;
         this.sprite = null;
+
+        this.checkCollision = false;
+        this.randomPhase = Math.random() * Math.PI * 2;
 
         this.directionMap = {
             down: 0,
@@ -41,20 +59,45 @@ export class Enemy {
     }
 
     update(deltaTime) {
-        const dx = this.game.player.worldX - this.worldX;
-        const dy = this.game.player.worldY - this.worldY;
-        const distance = Math.hypot(dx, dy);
+        const rawDx = this.game.player.worldX - this.worldX;
+        const rawDy = this.game.player.worldY - this.worldY;
+        const distance = Math.hypot(rawDx, rawDy);
+
+        this.updateFacing(rawDx, rawDy);
 
         if (distance > 0) {
-            this.worldX += dx / distance * this.speed;
-            this.worldY += dy / distance * this.speed;
+            let angle = Math.atan2(rawDy, rawDx);
+
+            if (this.checkCollision) {
+                const wobbleStrength = distance > 100 ? 0.8 : 0.2;
+                angle += Math.sin(this.game.levelTimer * 0.003 + this.randomPhase) * wobbleStrength;
+            }
+
+            const velocityX = Math.cos(angle) * this.speed;
+            const velocityY = Math.sin(angle) * this.speed;
+
+            if (this.checkCollision) {
+                const offsetX = Math.sign(velocityX) * (this.radius * 0.5);
+                const offsetY = Math.sign(velocityY) * (this.radius * 0.5);
+
+                const nextX = this.worldX + velocityX;
+                if (!this.game.collisionMap.isObstacle(nextX + offsetX, this.worldY)) {
+                    this.worldX += velocityX;
+                }
+
+                const nextY = this.worldY + velocityY;
+                if (!this.game.collisionMap.isObstacle(this.worldX, nextY + offsetY)) {
+                    this.worldY += velocityY;
+                }
+            } else {
+                this.worldX += velocityX;
+                this.worldY += velocityY;
+            }
         }
 
         if (this.sprite) {
             this.sprite.update(deltaTime || 16);
         }
-
-        this.updateFacing(dx, dy);
 
         if (this.sprite) {
             this.sprite.frameY = this.facing;

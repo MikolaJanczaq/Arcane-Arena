@@ -25,7 +25,6 @@ export class Player {
 
         this.isFrozen = false;
         this.shakesNeeded = 5;
-        this.currentShakes = 0;
 
         const frameSize = 64;
 
@@ -49,8 +48,16 @@ export class Player {
         }
 
         if (input.x !== 0 || input.y !== 0) {
-            this.worldX += input.x * this.speed;
-            this.worldY += input.y * this.speed;
+            const nextX = this.worldX + input.x * this.speed;
+            const nextY = this.worldY + input.y * this.speed;
+
+            if (!this.game.collisionMap.isObstacle(nextX, this.worldY)) {
+                this.worldX = nextX;
+            }
+
+            if (!this.game.collisionMap.isObstacle(this.worldX, nextY)) {
+                this.worldY = nextY;
+            }
         }
 
         let direction = this.spriteWalk.frameY;

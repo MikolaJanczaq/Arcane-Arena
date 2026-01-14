@@ -11,6 +11,8 @@ export class Fox extends Enemy {
         this.damage = 10;
         this.radius = 20;
 
+        this.checkCollision = true;
+
         const image = new Image();
         image.src = "assets/enemies/Fox/Fox_Run.png";
         this.sprite = new Sprite(this.game, image, 32, 32);
