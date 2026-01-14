@@ -10,11 +10,10 @@ export class Boss extends Enemy {
 
         this.speed = 0.6;
         this.radius = 40;
-        this.hp = 500 + (this.game.level * 200);
-        this.maxHp = this.hp;
-        this.damage = 10;
-        this.attackDamage = 20;
-        this.xpValue = 500;
+        this.maxHp = 500 + (this.game.worldLevel * 200);
+        this.hp = this.maxHp;
+        this.damage = Math.floor(10 * this.difficultyMultiplier);
+        this.attackDamage = Math.floor(20 * this.difficultyMultiplier);
 
         this.width = 128;
         this.height = 128;
@@ -120,7 +119,7 @@ export class Boss extends Enemy {
         this.state = 'dead';
         this.spriteDeath.frameX = 0;
 
-        this.game.dataManager.addGold(50);
+        this.game.player.gold += 50;
 
         setTimeout(() => {
             this.game.triggerVictory();

@@ -18,8 +18,6 @@ export class Game {
         this.isPaused = false;
         this.gameOver = false;
 
-        this.level = 1;
-
         this.levelDuration = 180000;
         this.levelTimer = 0;
         this.bossSpawned = false;
@@ -27,6 +25,7 @@ export class Game {
         this.arena = null;
 
         this.dataManager = dataManager;
+        this.worldLevel = this.dataManager.data.currentLevel || 1;
 
         this.playerImage = new Image();
         this.playerImage.src = "assets/player/Swordsman_Walk.png";
@@ -44,7 +43,6 @@ export class Game {
         this.optionsContainer = document.getElementById('options-container');
         this.victoryScreen = document.getElementById('victory-screen');
         this.gameOverScreen = document.getElementById('game-over-screen');
-        this.scoreText = document.getElementById('score-text');
 
         this.grid = new SpatialGrid(300);
 
@@ -260,11 +258,10 @@ export class Game {
         this.gameOver = true;
         this.dataManager.addGold(this.player.gold);
         this.gameOverScreen.classList.remove('hidden');
-        this.scoreText.innerText = "Level Reached: " + this.player.level;
     }
 
     triggerVictory() {
-        this.dataManager.addGold(this.player.gold);
+        this.dataManager.completeLevel(this.player.gold);
         this.isPaused = true;
         this.victoryScreen.classList.remove('hidden');
     }

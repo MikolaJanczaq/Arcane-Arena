@@ -5,10 +5,10 @@ export class Fox extends Enemy {
     constructor(game) {
         super(game);
 
-        this.speed = 0.5;
-        this.maxHp = 30;
+        this.speed = 0.5+ (this.game.worldLevel * 0.05);
+        this.maxHp = 30 * this.difficultyMultiplier;
         this.hp = this.maxHp;
-        this.damage = 10;
+        this.damage = 10 * this.difficultyMultiplier;
         this.radius = 20;
 
         this.checkCollision = true;
