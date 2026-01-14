@@ -8,6 +8,11 @@ let animationId = null;
 const dataManager = new DataManager();
 
 window.addEventListener("load", async function () {
+    const canvas = document.getElementById("gameCanvas");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
     await dataManager.loadData();
 
     const playBtn = document.getElementById('play-btn');
@@ -18,6 +23,14 @@ window.addEventListener("load", async function () {
 
     playBtn.addEventListener('click', startGame);
     setupShopButtons();
+
+    document.getElementById('restart-btn').addEventListener('click', () => {
+        location.reload();
+    });
+
+    document.getElementById('next-level-btn').addEventListener('click', () => {
+        location.reload();
+    });
 });
 
 function updateUI() {
@@ -53,10 +66,10 @@ function setupShopButtons() {
 function startGame() {
     document.getElementById('main-menu').classList.add('hidden');
     document.getElementById('game-over-screen').classList.add('hidden');
+    document.getElementById('victory-screen').classList.add('hidden');
+    document.getElementById('levelup-screen').classList.add('hidden');
 
     const canvas = document.getElementById("gameCanvas");
-    // const context = canvas.getContext("2d"); //todo dont know
-
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
