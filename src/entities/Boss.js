@@ -1,8 +1,9 @@
-import {Sprite} from "../graphics/Sprite.js";
+import { Enemy } from "./Enemy.js";
+import { Sprite } from "../graphics/Sprite.js";
 
-export class Boss {
+export class Boss extends Enemy {
     constructor(game) {
-        this.game = game;
+        super(game);
 
         this.worldX = this.game.player.worldX + 400;
         this.worldY = this.game.player.worldY;
@@ -11,8 +12,19 @@ export class Boss {
         this.radius = 40;
         this.hp = 500 + (this.game.level * 200);
         this.maxHp = this.hp;
-        this.damage = 0;
+        this.damage = 10;
         this.attackDamage = 20;
+        this.xpValue = 500;
+
+        this.width = 128;
+        this.height = 128;
+
+        this.directionMap = {
+            down: 0,
+            up: 1,
+            left: 2,
+            right: 3
+        };
 
         const frameWidth = 32;
         const frameHeight = 32;
@@ -37,13 +49,11 @@ export class Boss {
         this.spriteDeath.loop = false;
         this.spriteDeath.maxFrame = 5;
 
-        this.state = 'chase'; // chase, attack, dead
+        this.state = 'chase';
         this.attackRange = 70;
         this.attackCooldown = 1500;
         this.attackTimer = 0;
-        this.markedForDeletion = false;
-
-        this.facing = 0 // 0 down 1 up 2 left 3 right
+        this.hasDealtDamage = false;
     }
 
     update(deltaTime) {
@@ -57,13 +67,7 @@ export class Boss {
         const dy = this.game.player.worldY - this.worldY;
         const distance = Math.hypot(dx, dy);
 
-        if (Math.abs(dx) > Math.abs(dy)) {
-            if (dx > 0) this.facing = 3; // right
-            else this.facing = 2;        // left
-        } else {
-            if (dy > 0) this.facing = 0; // down
-            else this.facing = 1;        // up
-        }
+        this.updateFacing(dx, dy);
 
         if (this.state === 'attack') {
             this.spriteAttack.frameY = this.facing;
@@ -87,7 +91,6 @@ export class Boss {
                     this.worldX += (dx / distance) * this.speed;
                     this.worldY += (dy / distance) * this.speed;
                 }
-
                 this.spriteRun.frameY = this.facing;
                 this.spriteRun.update(deltaTime);
             } else {
@@ -111,14 +114,6 @@ export class Boss {
         this.spriteAttack.frameX = 0;
         this.attackTimer = 0;
         this.hasDealtDamage = false;
-    }
-
-    takeDamage(amount) {
-        if (this.state === 'dead') return
-        this.hp -= amount;
-        if (this.hp <= 0) {
-            this.die();
-        }
     }
 
     die() {
@@ -148,6 +143,6 @@ export class Boss {
         else if (this.state === 'attack') spriteToDraw = this.spriteAttack;
         else spriteToDraw = this.spriteRun;
 
-        spriteToDraw.draw(context, screenX, screenY, 128, 128);
+        spriteToDraw.draw(context, screenX, screenY, this.width, this.height);
     }
 }
