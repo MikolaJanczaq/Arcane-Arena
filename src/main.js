@@ -13,8 +13,7 @@ const dataManager = new DataManager();
 window.addEventListener("load", async function () {
     const canvas = document.getElementById("gameCanvas");
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    resizeCanvas();
 
     await dataManager.loadData();
 
@@ -34,11 +33,30 @@ window.addEventListener("load", async function () {
     document.getElementById('next-level-btn').addEventListener('click', () => {
         location.reload();
     });
+
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+    });
 });
+
+function resizeCanvas() {
+    const canvas = document.getElementById("gameCanvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    scale = canvas.width / TARGET_WIDTH;
+
+    if (game) {
+        game.width = canvas.width / scale;
+        game.height = canvas.height / scale;
+        if (game.input) {
+            game.input.scale = scale;
+        }
+    }
+}
 
 function updateUI() {
     document.getElementById('menu-gold').innerText = dataManager.data.gold;
-
     updateShopButton('damage');
     updateShopButton('health');
     updateShopButton('speed');
@@ -73,10 +91,8 @@ function startGame() {
     document.getElementById('levelup-screen').classList.add('hidden');
 
     const canvas = document.getElementById("gameCanvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
 
-    scale = canvas.width / TARGET_WIDTH;
+    resizeCanvas();
 
     game = new Game(canvas.width / scale, canvas.height / scale, dataManager);
 
@@ -86,19 +102,6 @@ function startGame() {
 
     lastTime = 0;
     animate(0);
-
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        scale = canvas.width / TARGET_WIDTH;
-
-        if(game) {
-            game.width = canvas.width / scale;
-            game.height = canvas.height / scale;
-            game.input.scale = scale;
-        }
-    });
 }
 
 function animate(timestamp) {
