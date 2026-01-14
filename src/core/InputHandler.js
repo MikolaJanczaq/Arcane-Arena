@@ -1,7 +1,9 @@
-export class InputHandler{
+export class InputHandler {
     constructor() {
         this.x = 0;
         this.y = 0;
+
+        this.scale = 1;
 
         this.shakeThreshold = 15;
         this.lastX = 0;
@@ -39,14 +41,14 @@ export class InputHandler{
 
         window.addEventListener('touchstart', e => {
             this.touchActive = true;
-            this.touchStartX = e.changedTouches[0].pageX;
-            this.touchStartY = e.changedTouches[0].pageY;
+            this.touchStartX = e.changedTouches[0].pageX / this.scale;
+            this.touchStartY = e.changedTouches[0].pageY / this.scale;
         });
 
         window.addEventListener('touchmove', e => {
             if (!this.touchActive) return;
-            const touchX = e.changedTouches[0].pageX;
-            const touchY = e.changedTouches[0].pageY;
+            const touchX = e.changedTouches[0].pageX / this.scale;
+            const touchY = e.changedTouches[0].pageY / this.scale;
 
             const dx = touchX - this.touchStartX;
             const dy = touchY - this.touchStartY;
@@ -94,8 +96,6 @@ export class InputHandler{
             });
         }
     }
-
-
 
     // method for desktop keyboard WSAD
     update() {
