@@ -66,7 +66,6 @@ export class UI {
             ctx.fillText('GAME OVER', this.game.width * 0.5, this.game.height * 0.5);
 
             ctx.font = '20px ' + this.fontFamily;
-            ctx.fillText('Odśwież stronę, aby zagrać ponownie', this.game.width * 0.5, this.game.height * 0.5 + 40);
         }
 
         ctx.restore();
