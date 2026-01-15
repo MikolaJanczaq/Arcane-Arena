@@ -212,6 +212,12 @@ export class Game {
         // console.log("Boss spawned, arena closed")
     }
 
+    vibrate(pattern) {
+        if (navigator.vibrate) {
+            navigator.vibrate(pattern);
+        }
+    }
+
     spawnDrop(x, y) {
         const chance = Math.random();
 
@@ -256,11 +262,13 @@ export class Game {
 
     triggerGameOver() {
         this.gameOver = true;
+        this.vibrate(800);
         this.dataManager.addGold(this.player.gold);
         this.gameOverScreen.classList.remove('hidden');
     }
 
     triggerVictory() {
+        this.vibrate([100, 50, 100, 50, 500]);
         this.dataManager.completeLevel(this.player.gold);
         this.isPaused = true;
         this.victoryScreen.classList.remove('hidden');

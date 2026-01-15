@@ -126,7 +126,7 @@ export class Player {
 
     takeDamage(amount) {
         if (this.invulnerable) return;
-
+        this.game.vibrate(200);
         this.hp -= amount;
         this.invulnerable = true;
         if (this.hp <= 0) {
